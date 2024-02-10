@@ -18,7 +18,7 @@ frame = tkinter.Frame(root)
 def access():
   if(datetime.datetime.now() < date):
     print("Access Granted")
-    messagebox.showinfo('Access Granted', 'System running: Up to date')
+    # messagebox.showinfo('Access Granted', 'System running: Up to date')
   else:
     print('Access Denied')
     messagebox.showerror("showerror", "Error Occured, Contact developer")
@@ -30,6 +30,10 @@ def submit():
   print("Package Name: ", _package_name.get())
   print("Time: ", datetime.datetime.now().time())
 
+def createWidgets():
+  for i in range(str(_overview.get())): 
+      print('hello')
+    
 
 # welcome texts & btn
 welcome = tkinter.Label(frame, text="Welcome to JSON Maker", font=("Arial", 12),justify="center", padx=10, pady=10)
@@ -55,7 +59,8 @@ overview.grid(row=4, column=0)
 # Entry widgets creation
 _package_name = tkinter.Entry(frame)
 _subheading = tkinter.Entry(frame)
-_overview = tkinter.Spinbox(frame, text="Select Overview")
+# __overview = 
+_overview = tkinter.Spinbox(frame, command=createWidgets)
 
 # Entry Integration
 _package_name.grid(row=2, column=1, columnspan=2)
