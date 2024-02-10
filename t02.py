@@ -2,14 +2,24 @@
 
 import tkinter as tk
 import json
-
+from tkinter import Scrollbar
 class EntryForm:
     def __init__(self, master):
         self.master = master
         self.master.title("JSON Data Entry")
         
+        self.heading = tk.Label(master, text='Package heading')
+        self.heading.pack()
+        self.headding_entry = tk.Entry(master)
+        self.headding_entry.pack()
+        
+        self.subheading = tk.Label(master, text='Package sub-heading')
+        self.subheading.pack()
+        self.subheadding_entry = tk.Entry(master)
+        self.subheadding_entry.pack()
+        
         # Entry field for number of entries
-        self.num_entries_label = tk.Label(master, text="Number of entries:")
+        self.num_entries_label = tk.Label(master, text="Overview:-Number of entries:")
         self.num_entries_label.pack()
         self.num_entries_entry = tk.Entry(master)
         self.num_entries_entry.pack()
@@ -17,11 +27,21 @@ class EntryForm:
         # Create entry fields on button click
         self.create_entries_button = tk.Button(master, text="Create Entries", command=self.create_entries)
         self.create_entries_button.pack()
+        
+        self.map = tk.Label(master, text="Enter map coordinates")
+        self.map.pack()
+
+        self.frame = tk.Frame(master)
+        self.frame.pack()
+        
+        
+        self.map_entry = tk.Entry(master)
+        self.map_entry.pack()
 
         # Entry and error handling setup
         self.entries = []  # Store entry widgets for easy access
         self.error_label = None  # Initialize placeholder for error messages
-
+        
         # Submit button and JSON creation
         self.submit_button = tk.Button(master, text="Submit", command=self.submit_data)
         self.submit_button.pack()
@@ -37,10 +57,45 @@ class EntryForm:
 
             # Create entry widgets
             for i in range(num_entries):
-                entry_label = tk.Label(self.master, text=f"Entry {i + 1}:")
+                entry_label = tk.Label(self.master, text=f"Overview - Heading {i + 1}:")
                 entry_label.pack()
                 entry_widget = tk.Entry(self.master)
                 entry_widget.pack()
+                
+                entry_label_text = tk.Label(self.master, text=f"Overview - Text {i + 1}:")
+                entry_label_text.pack()
+                entry_widget_text = tk.Entry(self.master)
+                entry_widget_text.pack()
+
+                self.entries.append(entry_widget)
+
+                # Enable submit button once entries are created
+                self.submit_button.config(state=tk.NORMAL)
+
+        except ValueError as e:
+            self.show_error("Invalid input: " + str(e))
+
+    def create_packages(self):
+        try:
+            num_entries = int(self.num_entries_entry.get())
+            if num_entries <= 0:
+                raise ValueError("Number of entries must be positive.")
+
+            # Clear existing entries if any
+            self.clear_entries()
+
+            # Create entry widgets
+            for i in range(num_entries):
+                entry_label = tk.Label(self.master, text=f"Overview - Heading {i + 1}:")
+                entry_label.pack()
+                entry_widget = tk.Entry(self.master)
+                entry_widget.pack()
+                
+                entry_label_text = tk.Label(self.master, text=f"Overview - Text {i + 1}:")
+                entry_label_text.pack()
+                entry_widget_text = tk.Entry(self.master)
+                entry_widget_text.pack()
+
                 self.entries.append(entry_widget)
 
                 # Enable submit button once entries are created
@@ -86,8 +141,13 @@ class EntryForm:
     def show_success(self, message):
         self.show_error(message, fg="green")  # Use error label for success message with green color
 
+
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = EntryForm(root)
     root.geometry('600x600')
+    
+    scrollbar = Scrollbar(root)
+    scrollbar.pack(side = "right", fill="y")
     root.mainloop()
