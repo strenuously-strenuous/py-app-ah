@@ -3,10 +3,10 @@
 import tkinter as tk
 import json
 from tkinter import Scrollbar
+
 class EntryForm:
     def __init__(self, master):
         self.master = master
-        self.master.title("JSON Data Entry")
         
         self.heading = tk.Label(master, text='Package heading')
         self.heading.pack()
@@ -145,9 +145,41 @@ class EntryForm:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    app = EntryForm(root)
-    root.geometry('600x600')
     
-    scrollbar = Scrollbar(root)
-    scrollbar.pack(side = "right", fill="y")
+    # main
+    main_frame = tk.Frame(root)
+    main_frame.pack(fill="both", expand=1)
+    
+    # canvas
+    my_canvas = tk.Canvas(main_frame)
+    my_canvas.pack(side='left', fill='both', expand=1)
+
+    # scrollbar
+    my_scrollbar = tk.Scrollbar(main_frame, orient='vertical', command=my_canvas.yview)
+    my_scrollbar.pack(side='right', fill='y')
+    
+    # configure the canvas
+    my_canvas.configure(yscrollcommand=my_scrollbar.set)
+    my_canvas.bind(
+        '<Configure>', lambda e: my_canvas.configure(scrollregion=my_canvas.bbox("all"))
+    )
+    
+    second_frame = tk.Frame(my_canvas, width = 1000, height = 100)
+    btn1 = tk.Button(second_frame,
+                    text="Browse...",
+                    compound="left",
+                    fg="blue", width=22,
+                    font=("bold", 10),
+                    height=1,
+                    )
+
+    btn1.place(x=600, y=0)
+
+    my_canvas.create_window((0, 0), window=second_frame, anchor="nw")
+    
+    
+    app = EntryForm(second_frame)
+    root.geometry('600x600')
+    root.title("JSON Data Entry")
+    
     root.mainloop()
